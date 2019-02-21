@@ -3,65 +3,105 @@
   <div class="title">
     <h1>Add Phone Account:</h1>
   </div> 
-  <form #payForm="ngForm">
+  <form [formGroup]="userForm">
     <div class="form-group phone">
-      <label for="phone">Phone:</label>
-      <input type="tel" name="phone" id="phone" required [(ngModel)]="phone" #phoneCheck="ngModel" pattern="^((\+38)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$">
-      <div [hidden]="phoneCheck.valid || phoneCheck.pristine" class="error-message">
-        Not valid phone number
+      <label for="userPhone">Phone:</label>
+      <input 
+        type="tel" 
+        id="phone" 
+        name="userPhone" 
+        formControlName = "userPhone"
+        placeholder="380505554433">
+      <div *ngIf="msgErrors.userPhone" class="error-message">
+        {{ msgErrors.userPhone }}
       </div>
     </div>
 
     <div class="form-group email">
-      <label for="email">Email:</label>
-      <input type="email" name="email" id="email" required [(ngModel)]="email" #emailCheck="ngModel" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
-      <div [hidden]="emailCheck.valid || emailCheck.pristine" class="error-message">
-         Not valid Email
+      <label for="userEmail">Email:</label>
+      <input 
+        type="email" 
+        id="email"
+        name="userEmail" 
+        formControlName = "userEmail"
+        placeholder="example@example.com">
+      <div *ngIf="msgErrors.userEmail" class="error-message">
+         {{ msgError.userEmail }}
       </div>
     </div>
 
     <div class="form-group sum">
-      <label for="sum">Sum:</label>
-      <input type="text" name="sum" id="sum"  min="0" pattern="\d{1,5}"
-            required [(ngModel)]="sum" class="short" #sumCheck="ngModel" >
-      <div [hidden]="sumCheck.valid || sumCheck.pristine" class="error-message">
-        Sum is required
+      <label for="userSum">Sum:</label>
+      <input 
+        type="text" 
+        id="sum"
+        name="userSum"
+        formControlName = "userSum"
+        class="short">
+      <div *ngIf="msgErrors.userSum" class="error-message">
+        {{ msgErrors.userSum }}
       </div>
     </div>
 
     <div class="form-group card">
-      <label for="card">Card Number:</label>
-      <input type="text" name="card" id="card" required [(ngModel)]="card" #cardCheck="ngModel" 
-            pattern="\d{16}" >
-      <div [hidden]="cardCheck.valid || cardCheck.pristine" class="error-message">
-        Card  is required field.
+      <label for="userCard">Card Number:</label>
+      <input 
+        type="text" 
+        name="userCard" 
+        id="card"
+        formControlName = "userCard">
+      <div *ngIf="msgErrors.userCard" class="error-message">
+        {{ msgErrors.userCard }}
       </div>
     </div> 
     
     <div class="form-group date">  
       <label>Date:</label>
-      <select  name="month" id="month" [(ngModel)]="addMonth" #monthCheck="ngModel" required >
-          <option *ngFor="let month of months" value="month">{{month}}</option>
+      <select  
+        id="month" 
+        name="userMonth"
+        [(ngModel)]="addMonth" 
+        formControlName = "userMonth">
+        <option *ngFor="let month of AuthentificationService.months" 
+          [value]="month.value">
+          {{ month.viewValue }}
+        </option>
       </select>
-       <select  name="year" id="year" [(ngModel)]="addYear" #yearCheck="ngModel" required >
-          <option *ngFor="let year of years" value="year">{{year}}</option>
+       <select  
+        id="year"
+        name="userYear" 
+        [(ngModel)]="addYear"
+        formControlName = "userYear">
+        <option *ngFor="let year of AuthentificationService.years" 
+          [value]="year.value">
+          {{ year.viewValue }}
+        </option>
       </select>
-      <div [hidden]="monthCheck.dirty || yearCheck.dirty" class="error-message">
-        Month and year are required field.
+      <div *ngIf="msgErrors.userMonth" class="error-message">
+        {{ msgErrors.userMonth }}
       </div>
     </div>       
 
     <div class="form-group cvs">
-      <label for="cvs">CVS:</label>
-      <input type="text" name="cvs" id="cvs" required [(ngModel)]="cvs" #cvsCheck="ngModel" 
-             pattern="\d{3}">
-      <div [hidden]="cvsCheck.valid || cvsCheck.pristine" class="error-message">
-        CVS  is required field.
+      <label for="userCVS">CVS:</label>
+      <input 
+        type="text" 
+        name="userCVS" 
+        id="cvs" 
+        formControlName = "userCVS">
+      <div *ngIf = "msgErrors.userCVS" class="error-message">
+        {{ msgErrors.userCVS }}
       </div>
     </div>
 
     <div class="form-group button-wrap">
-      <button type="submit" [disabled]="!payForm.form.valid" [routerLink]="'/lastpage'">Pay</button>
+      <button 
+        type="submit" 
+        [disabled]="isBtnDisabled()" 
+        (click)="isOnValid()"
+        [routerLink]="'/lastpage'">
+        Pay
+      </button>
     </div>  
   </form>
 
